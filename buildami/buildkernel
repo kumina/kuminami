@@ -4,9 +4,9 @@ set -e -x
 
 # Use a prerelease kernel, to work around SMP crash bug during reboot
 mkdir -p distfiles
-[ -f distfiles/linux-image-2.6.35-29-virtual_2.6.35-29.51_$ARCH.deb ] || wget -O distfiles/linux-image-2.6.35-29-virtual_2.6.35-29.51_$ARCH.deb https://launchpad.net/~canonical-kernel-team/+archive/ppa/+files/linux-image-2.6.35-29-virtual_2.6.35-29.51_$ARCH.deb
+[ -f distfiles/linux-image-2.6.35-28-virtual_2.6.35-28.50_$ARCH.deb ] || wget -O distfiles/linux-image-2.6.35-28-virtual_2.6.35-28.50_$ARCH.deb https://launchpad.net/~canonical-kernel-team/+archive/ppa/+files/linux-image-2.6.35-28-virtual_2.6.35-28.50_$ARCH.deb
 
 rm -f install.kernel.$ARCH
-dpkg-deb -x distfiles/linux-image-2.6.35-29-virtual_2.6.35-29.51_$ARCH.deb kernel
-install -m 444 kernel/boot/vmlinuz-2.6.35-29-virtual install.kernel.$ARCH
+dpkg-deb -x distfiles/linux-image-2.6.35-28-virtual_2.6.35-28.50_$ARCH.deb kernel
+install -m 444 kernel/boot/vmlinuz-2.6.35-28-virtual install.kernel.$ARCH
 rm -Rf kernel
