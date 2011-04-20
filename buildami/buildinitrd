@@ -77,9 +77,14 @@ ifconfig -a
 netstat -na
 netstat -nr
 
-telnetd -l /bin/sh
-
 wget -O - http://169.254.169.254/2007-01-19/user-data | gunzip | tar -xf -
+
+if /install
+then
+	reboot
+else
+	telnetd -l /bin/sh
+fi
 EOF
 chmod +x etc/rc
 

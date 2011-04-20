@@ -1,8 +1,16 @@
 #!/bin/sh
 
+if test "$1" = "-d"
+then
+	DEBUG=true
+	shift
+else
+	DEBUG=false
+fi
+
 if test $# -ne 3
 then
-	echo "usage: $0 configuration-file hostname type" >&2
+	echo "usage: $0 [-d] configuration-file hostname type" >&2
 	exit 1
 fi
 
@@ -45,6 +53,9 @@ cat > $DATA/params << EOF
 HOSTNAME=$HOSTNAME
 PUPPETMASTER=$EC2_PUPPETMASTER
 EOF
+
+# Allow the user to perform the installation manually
+$DEBUG && mv $DATA/install $DATA/manual-install
 
 PUPDIR=/var/lib/puppet/ssl
 

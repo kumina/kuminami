@@ -143,5 +143,3 @@ title Debian
 	kernel	/`echo vmlinu*` root=/dev/mapper/vg-root
 	initrd	/`echo initrd*`
 EOF
-
-reboot
