@@ -1,0 +1,148 @@
+#!/bin/sh
+
+set -e -x
+
+BUSYBOX=busybox-1.18.4
+
+DEBS="
+	b/base-installer/bootstrap-base_1.115_$ARCH.udeb
+	d/debootstrap/debootstrap_1.0.26+squeeze1_all.deb
+	e/e2fsprogs/e2fslibs_1.41.12-2_$ARCH.deb
+	e/e2fsprogs/e2fsprogs_1.41.12-2_$ARCH.deb
+	e/e2fsprogs/libcomerr2_1.41.12-2_$ARCH.deb
+	e/eglibc/libc6_2.11.2-10_$ARCH.deb
+	g/gcc-4.4/libgcc1_4.4.5-8_$ARCH.deb
+	libs/libselinux/libselinux1_2.0.96-1_$ARCH.deb
+	l/lvm2/libdevmapper1.02.1_1.02.48-5_$ARCH.deb
+	l/lvm2/lvm2_2.02.66-5_$ARCH.deb
+	n/ncurses/libncurses5_5.7+20100313-5_$ARCH.deb
+	r/readline5/libreadline5_5.2-7_$ARCH.deb
+	u/udev/libudev0_164-3_$ARCH.deb
+	u/util-linux/libblkid1_2.17.2-9_$ARCH.deb
+	u/util-linux/libuuid1_2.17.2-9_$ARCH.deb
+"
+
+rm -Rf initrd 
+
+# Manually build Busybox for now
+mkdir -p distfiles
+[ -f distfiles/$BUSYBOX.tar.bz2 ] || wget -O distfiles/$BUSYBOX.tar.bz2 http://busybox.net/downloads/$BUSYBOX.tar.bz2
+rm -Rf $BUSYBOX
+tar -xf distfiles/$BUSYBOX.tar.bz2
+cd $BUSYBOX
+make defconfig
+cat - .config > newconfig << EOF
+CONFIG_AR=y
+CONFIG_PREFIX="../initrd"
+CONFIG_STATIC=y
+EOF
+mv newconfig .config
+make oldconfig
+make
+mkdir -p ../initrd/bin
+install -m 555 busybox ../initrd/bin/busybox
+cd ..
+rm -Rf $BUSYBOX
+
+# Install .debs for a minimalistic installation
+for i in $DEBS
+do
+	BASE=distfiles/`echo $i | sed -e 's|.*/||'`
+	if ! test -f $BASE
+	then
+		mkdir -p distfiles
+		wget -O $BASE http://ftp.de.debian.org/debian/pool/main/$i
+	fi
+	dpkg -x $BASE initrd
+done
+
+cd initrd
+rm -Rf etc var
+mkdir -p dev/pts etc proc sys usr/share/udhcpc
+
+# Create essential configuration files
+echo '::sysinit:/etc/rc' > etc/inittab
+cat > etc/rc << 'EOF'
+#!/bin/sh
+
+mount -t devpts none /dev/pts
+mount -t proc none /proc
+mount -t sysfs none /sys
+mdev -s
+df -h
+
+ifconfig eth0 up
+udhcpc
+ifconfig -a
+netstat -na
+netstat -nr
+
+telnetd -l /bin/sh
+
+wget -O - http://169.254.169.254/2007-01-19/user-data | gunzip | tar -xf -
+EOF
+chmod +x etc/rc
+
+cat > usr/share/udhcpc/default.script << 'EOF'
+#!/bin/sh
+# udhcpc script edited by Tim Riker <Tim@Rikers.org>
+
+RESOLV_CONF="/etc/resolv.conf"
+
+[ -n "$1" ] || { echo "Error: should be called from udhcpc"; exit 1; }
+
+NETMASK=""
+[ -n "$subnet" ] && NETMASK="netmask $subnet"
+BROADCAST="broadcast +"
+[ -n "$broadcast" ] && BROADCAST="broadcast $broadcast"
+
+case "$1" in
+	deconfig)
+		echo "Setting IP address 0.0.0.0 on $interface"
+		ifconfig $interface 0.0.0.0
+		;;
+
+	renew|bound)
+		echo "Setting IP address $ip on $interface"
+		ifconfig $interface $ip $NETMASK $BROADCAST
+
+		if [ -n "$router" ] ; then
+			echo "Deleting routers"
+			while route del default gw 0.0.0.0 dev $interface ; do
+				:
+			done
+
+			metric=0
+			for i in $router ; do
+				echo "Adding router $i"
+				route add default gw $i dev $interface metric $((metric++))
+			done
+		fi
+
+		echo "Recreating $RESOLV_CONF"
+		echo -n > $RESOLV_CONF-$$
+		[ -n "$domain" ] && echo "search $domain" >> $RESOLV_CONF-$$
+		for i in $dns ; do
+			echo " Adding DNS server $i"
+			echo "nameserver $i" >> $RESOLV_CONF-$$
+		done
+		mv $RESOLV_CONF-$$ $RESOLV_CONF
+		;;
+esac
+
+exit 0
+EOF
+chmod +x usr/share/udhcpc/default.script
+
+# Create Busybox symlinks
+sudo mount -t proc proc proc
+sudo chroot . /bin/busybox --install -s
+sudo umount proc
+ln -s /proc/mounts etc/mtab
+ln -s /sbin/init init
+
+# Create cpio
+rm -Rf usr/lib/gconv usr/share/doc usr/share/locale usr/share/man
+find . | cpio -o -H newc | gzip -9 > ../install.initrd.$ARCH
+cd ..
+rm -Rf initrd

@@ -1,0 +1,65 @@
+#!/bin/sh
+
+if test $# -ne 3
+then
+	echo "usage: $0 configuration-file hostname type" >&2
+	exit 1
+fi
+
+if test `id -u` -ne 0
+then
+	echo "error: must run as root" >&2
+	exit 1
+fi
+
+set -e -x
+
+. $1
+HOSTNAME=$2
+TYPE=$3
+
+case $TYPE in
+small)
+	AMI=$EC2_AMI_32BIT
+	;;
+large)
+	AMI=$EC2_AMI_64BIT
+	;;
+*)
+	echo "error: unknown type: $TYPE" >&2
+	;;
+esac
+
+DATA=`mktemp -d /tmp/kuminami.XXXXXX`
+
+install -m 555 install partitions $DATA/
+cat > $DATA/params << EOF
+HOSTNAME=$HOSTNAME
+EOF
+
+PUPDIR=/var/lib/puppet/ssl
+
+# Create pre-generated Puppet certificates
+if ! test -f $PUPDIR/ca/signed/$HOSTNAME.pem -a \
+          -f $PUPDIR/private_keys/$HOSTNAME.pem
+then
+	puppetca -c $HOSTNAME
+	puppetca --generate $HOSTNAME
+fi
+
+install -m 444 $PUPDIR/ca/signed/$HOSTNAME.pem \
+	$DATA/puppet.cert.pem
+install -m 444 $PUPDIR/certs/ca.pem \
+	$DATA/puppet.ca.pem
+install -m 444 $PUPDIR/private_keys/$HOSTNAME.pem \
+	$DATA/puppet.privkey.pem
+
+# Create user-data
+tar -C $DATA -czf data.tar.gz .
+rm -Rf $DATA
+
+export JAVA_HOME=/usr
+I=`ec2-run-instances -t m1.$TYPE -f data.tar.gz ami-$AMI | awk '/^INSTANCE/ { print $2 }'`
+rm data.tar.gz
+
+ec2-create-tags $I -t hostname=$HOSTNAME

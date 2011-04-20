@@ -1,0 +1,17 @@
+#!/bin/sh
+
+if test $# -ne 2
+then
+	echo "usage: $0 configuration-file architecture" >&2
+	exit 1
+fi
+
+set -e -x
+
+. $1
+export ARCH=$2
+
+./buildinitrd
+./buildkernel
+./buildfs
+./buildami

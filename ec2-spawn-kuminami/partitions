@@ -1,0 +1,8 @@
+# Type		Label/device	Size		Mountpoint
+mklvmpart	root		5G		/
+mkrawpart	/dev/sda1			/boot
+mklvmpart	home		1G		/home
+mklvmpart	srv		2G		/srv
+mklvmpart	tmp		512M		/tmp
+mklvmpart	var		4G		/var
+mkswappart	swap		2G

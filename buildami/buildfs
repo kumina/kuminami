@@ -1,0 +1,28 @@
+#!/bin/sh
+
+set -e -x
+
+MOUNTDIR=`mktemp -d /tmp/rootfs.XXXXXX`
+
+# Create new file system
+rm -f install.rootfs.$ARCH
+dd if=/dev/zero of=install.rootfs.$ARCH bs=1M count=128
+mke2fs -F install.rootfs.$ARCH
+
+sudo mount -o loop install.rootfs.$ARCH $MOUNTDIR
+sudo chmod 777 $MOUNTDIR/
+
+# Install files within
+mkdir -p $MOUNTDIR/boot/grub
+install -m 444 install.initrd.$ARCH install.kernel.$ARCH $MOUNTDIR/boot
+cat > $MOUNTDIR/boot/grub/menu.lst << EOF
+default 0
+timeout 1
+title Kuminami
+	root (hd0)
+	kernel /boot/install.kernel.$ARCH
+	initrd /boot/install.initrd.$ARCH
+EOF
+
+sudo umount $MOUNTDIR
+sudo rmdir $MOUNTDIR
