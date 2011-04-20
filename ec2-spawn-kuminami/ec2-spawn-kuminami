@@ -44,6 +44,8 @@ done
 cat > $DATA/params << EOF
 HOSTNAME=$HOSTNAME
 EOF
+getent hosts $EC2_PUPPETMASTER |
+	awk '{ printf "PUPPETMASTER=%s\n", $1 }' >> $DATA/params
 
 PUPDIR=/var/lib/puppet/ssl
 
