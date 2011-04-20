@@ -1,0 +1,31 @@
+#!/usr/bin/make -f
+
+build:
+	dh_testdir
+
+clean:
+	dh_testdir
+	rm -Rf buildami/distfiles buildami/install.*
+	dh_clean
+
+install: build
+	dh_testdir
+	dh_installdirs usr/bin usr/share/kuminami
+	dh_install \
+		ec2-pdns-syncer/ec2-pdns-syncer \
+		ec2-spawn-kuminami/ec2-spawn-kuminami \
+		/usr/bin
+	dh_install \
+		ec2-spawn-kuminami/install \
+		ec2-spawn-kuminami/partitions \
+		/usr/share/kuminami
+	dh_installchangelogs
+	dh_compress
+
+binary: install
+	dh_testdir -s
+	dh_gencontrol -s
+	dh_md5sums -s
+	dh_builddeb -s
+
+.PHONY: build clean install binary

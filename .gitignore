@@ -1,2 +1,4 @@
 buildami/distfiles
 buildami/install.*
+debian/files
+debian/kuminami*

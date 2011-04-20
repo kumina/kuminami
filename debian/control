@@ -1,0 +1,14 @@
+Source: kuminami
+Section: admin
+Priority: optional
+Maintainer: Ed Schouten <ed@kumina.nl>
+Build-Depends: debhelper (>= 5)
+
+Package: kuminami
+Architecture: any
+Depends: ec2-api-tools
+Description: Helper scripts for Kumina EC2 instances
+ The Kuminami package contains two scripts, called ec2-pdns-syncer and
+ ec2-spawn-kuminami. The first can be used to automatically create CNAME
+ entries in PowerDNS for EC2 instances. The latter can be used to spawn
+ new EC2 instances with a default Kumina installation script.
