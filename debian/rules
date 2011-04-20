@@ -10,7 +10,7 @@ clean:
 
 install: build
 	dh_testdir
-	dh_installdirs usr/bin usr/share/kuminami
+	dh_installdirs usr/bin usr/share/kuminami usr/share/doc/kuminami
 	dh_install \
 		ec2-pdns-syncer/ec2-pdns-syncer \
 		ec2-spawn-kuminami/ec2-spawn-kuminami \
@@ -19,6 +19,9 @@ install: build
 		ec2-spawn-kuminami/install \
 		ec2-spawn-kuminami/partitions \
 		/usr/share/kuminami
+	dh_install \
+		debian/copyright \
+		/usr/share/doc/kuminami
 	dh_installchangelogs
 	dh_compress
 
