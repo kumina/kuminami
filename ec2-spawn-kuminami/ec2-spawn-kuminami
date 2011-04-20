@@ -32,7 +32,15 @@ esac
 
 DATA=`mktemp -d /tmp/kuminami.XXXXXX`
 
-install -m 555 install partitions $DATA/
+for i in install partitions
+do
+	if test -f $i
+	then
+		install -m 555 $i $DATA/
+	else
+		install -m 555 /usr/share/kuminami/$i $DATA/
+	fi
+done
 cat > $DATA/params << EOF
 HOSTNAME=$HOSTNAME
 EOF
