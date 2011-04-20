@@ -85,7 +85,7 @@ echo $HOSTNAME_BASE > /target/etc/hostname
 sed -i "s/^127.0.0.1.*/127.0.0.1 $HOSTNAME $HOSTNAME_BASE localhost/" \
 	/target/etc/hosts
 # XXX: Just change cert to use FQDN as SubjectAltName!
-echo "81.30.39.27 puppet" >> /target/etc/hosts
+echo "85.10.218.243 puppet" >> /target/etc/hosts
 
 # Install additional dependencies
 mount -t devpts none /target/dev/pts
