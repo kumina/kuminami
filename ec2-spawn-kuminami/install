@@ -51,7 +51,7 @@ mkswappart()
 }
 
 # Volume group
-DISKS=''
+DISKS=
 for i in /dev/sda2 /dev/sdb /dev/sdc
 do
 	if test -b $i
