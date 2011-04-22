@@ -96,7 +96,7 @@ chroot /target apt-get -y install \
 	openssh-server \
 	puppet
 
-# Install Puppet configuration XXX: use FQDN here as well!
+# Install Puppet configuration
 cat > /target/etc/default/puppet << EOF
 START=yes
 DAEMON_OPTS="-w 30"
