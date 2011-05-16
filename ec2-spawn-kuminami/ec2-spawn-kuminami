@@ -74,6 +74,9 @@ install -m 444 $PUPDIR/certs/ca.pem \
 install -m 444 $PUPDIR/private_keys/$HOSTNAME.pem \
 	$DATA/puppet.privkey.pem
 
+# Add SSH keys
+install -m 444 "$EC2_SSHKEYS" $DATA/sshkeys || true
+
 # Create user-data
 tar -C $DATA -czf data.tar.gz .
 rm -Rf $DATA

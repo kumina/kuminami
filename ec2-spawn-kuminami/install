@@ -131,6 +131,13 @@ cp /puppet.cert.pem $PUPDIR/ca/signed/$HOSTNAME.pem
 cp /puppet.ca.pem $PUPDIR/certs/ca.pem
 cp /puppet.privkey.pem $PUPDIR/private_keys/$HOSTNAME.pem
 
+# Add SSH keys
+if test -f /sshkeys
+then
+	mkdir -m 700 -p /target/root/.ssh
+	cp /sshkeys /target/root/.ssh/authorized_keys
+fi
+
 # Patch up the boot loader, now that we have a kernel
 cd /target/boot
 mkdir -p boot/grub
