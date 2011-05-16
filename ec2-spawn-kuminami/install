@@ -80,6 +80,7 @@ auto lo
 iface lo inet loopback
 auto eth0
 iface eth0 inet dhcp
+	dns-search $DNSDOMAINS
 EOF
 echo $HOSTNAME_BASE > /target/etc/hostname
 sed -i "s/^127.0.0.1.*/127.0.0.1 $HOSTNAME $HOSTNAME_BASE localhost/" \
@@ -94,7 +95,8 @@ chroot /target apt-get -y install \
 	lsb-release \
 	lvm2 \
 	openssh-server \
-	puppet
+	puppet \
+	resolvconf
 
 # Install Puppet configuration
 cat > /target/etc/default/puppet << EOF
@@ -112,8 +114,6 @@ templatedir=\$confdir/templates
 pluginsync=true
 
 [agent]
-node_name=$HOSTNAME
-server=$PUPPETMASTER
 splay=true
 environment=kumina
 runinterval=3600

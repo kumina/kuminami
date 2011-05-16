@@ -51,7 +51,7 @@ do
 done
 cat > $DATA/params << EOF
 HOSTNAME=$HOSTNAME
-PUPPETMASTER=$EC2_PUPPETMASTER
+DNSDOMAINS=$EC2_DNSDOMAINS
 EOF
 
 # Allow the user to perform the installation manually
