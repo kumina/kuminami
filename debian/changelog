@@ -1,3 +1,9 @@
+kuminami (1.0-1KUMIRELEASE4) unstable; urgency=low
+
+  * Properly set DNS search domains and install SSH keys.
+
+ -- Ed Schouten <ed@kumina.nl>  Mon, 16 May 2011 16:08:35 +0200
+
 kuminami (1.0-1KUMIRELEASE3) unstable; urgency=low
 
   * Add support for both attended and unattended installations.
