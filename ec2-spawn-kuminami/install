@@ -122,7 +122,15 @@ cat > /target/etc/rc.local << EOF
 #!/bin/sh
 set -e
 puppetd --verbose --no-daemonize --no-splay --onetime
-rm /etc/rc.local
+
+if test -x /etc/rc.final
+then
+	# This node has a dedicated application
+	/etc/rc.final
+else
+	# Just a generic system
+	rm /etc/rc.local
+fi
 EOF
 chmod +x /target/etc/rc.local
 PUPDIR=/target/var/lib/puppet/ssl
