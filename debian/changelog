@@ -1,3 +1,9 @@
+kuminami (1.1-1KUMIRELEASE1) unstable; urgency=low
+
+  * Allow the environment name to be configured.
+
+ -- Ed Schouten <ed@kumina.nl>  Wed, 21 Sep 2011 15:33:32 +0200
+
 kuminami (1.0-1KUMIRELEASE4) unstable; urgency=low
 
   * Properly set DNS search domains and install SSH keys.

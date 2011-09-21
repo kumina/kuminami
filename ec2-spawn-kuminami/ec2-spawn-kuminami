@@ -52,6 +52,7 @@ done
 cat > $DATA/params << EOF
 HOSTNAME=$HOSTNAME
 DNSDOMAINS='$EC2_DNSDOMAINS'
+PUPPETENVIRONMENT=$EC2_PUPPETENVIRONMENT
 EOF
 
 # Allow the user to perform the installation manually

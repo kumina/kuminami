@@ -115,7 +115,7 @@ pluginsync=true
 
 [agent]
 splay=true
-environment=kumina
+environment=$PUPPETENVIRONMENT
 runinterval=3600
 EOF
 cat > /target/etc/rc.local << EOF
