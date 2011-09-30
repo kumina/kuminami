@@ -1,3 +1,9 @@
+kuminami (1.2KUMIRELEASE1) unstable; urgency=low
+
+  * Made a fairly large mistake in the previous version, but already deployed it...
+
+ -- Tim Stoop <tim@kumina.nl>  Fri, 30 Sep 2011 14:01:16 +0000
+
 kuminami (1.2KUMIRELEASE0) unstable; urgency=low
 
   * Add all EC2 instance types.

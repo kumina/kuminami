@@ -20,21 +20,25 @@ then
 	exit 1
 fi
 
-set -e -x
+if $DEBUG; then
+	set -e -x
+fi
 
 . $1
 HOSTNAME=$2
 TYPE=$3
 
 case $TYPE in
-t1.micro,m1.small,c1.medium)
+t1.micro|m1.small|c1.medium)
         AMI=$EC2_AMI_32BIT
         ;;
-m1.large,m1.xlarge,m2.xlarge,m2.2xlarge,m2.4xlarge,c1.xlarge)
+m1.large|m1.xlarge|m2.xlarge|m2.2xlarge|m2.4xlarge|c1.xlarge)
         AMI=$EC2_AMI_64BIT
         ;;
 *)
         echo "error: unknown type: $TYPE" >&2
+	echo "Supported types: t1.micro, m1.small, m1.large, m1.xlarge, m2.xlarge, m2.2xlarge, m2.4xlarge, c1.medium, c1.xlarge" >&2
+	exit 1
         ;;
 esac
 
@@ -83,7 +87,7 @@ tar -C $DATA -czf data.tar.gz .
 rm -Rf $DATA
 
 export JAVA_HOME=/usr
-I=`ec2-run-instances -t m1.$TYPE -f data.tar.gz ami-$AMI | awk '/^INSTANCE/ { print $2 }'`
+I=`ec2-run-instances -t $TYPE -f data.tar.gz ami-$AMI | awk '/^INSTANCE/ { print $2 }'`
 rm data.tar.gz
 
 ec2-create-tags $I -t hostname=$HOSTNAME
