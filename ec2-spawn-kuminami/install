@@ -117,6 +117,7 @@ pluginsync=true
 splay=true
 environment=$PUPPETENVIRONMENT
 runinterval=3600
+configtimeout=1800
 EOF
 cat > /target/etc/rc.local << EOF
 #!/bin/sh

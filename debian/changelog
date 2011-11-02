@@ -1,3 +1,9 @@
+kuminami (1.3KUMIRELEASE1) unstable; urgency=low
+
+  * Add configtimeout to puppet.conf
+
+ -- Thomas Ronner <thomas@kumina.nl>  Wed, 02 Nov 2011 16:30:47 +0100
+
 kuminami (1.2KUMIRELEASE1) unstable; urgency=low
 
   * Made a fairly large mistake in the previous version, but already deployed it...
