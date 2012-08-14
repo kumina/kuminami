@@ -90,6 +90,9 @@ cat > /target/etc/apt/sources.list.d/kumina.list << EOF
 deb	http://debian.kumina.nl/debian	squeeze-kumina	main
 EOF
 
+mkdir /target/etc/apt/keys
+
+# The kumina repository key
 cat > /target/etc/apt/keys/056E8E56 << EOF
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.9 (GNU/Linux)
@@ -128,6 +131,43 @@ EOF
 
 cat > /target/etc/apt/sources.list.d/squeeze-backports.list << EOF
 deb	http://backports.debian.org/debian-backports	squeeze-backports	main contrib non-free
+EOF
+
+# The debian Backports key
+cat > /target/etc/apt/keys/498B91E6 << EOF
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: SKS 1.1.0
+
+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
+=08XM
+-----END PGP PUBLIC KEY BLOCK-----
 EOF
 
 cat > /target/etc/apt/preferences << EOF
