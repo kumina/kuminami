@@ -1,3 +1,9 @@
+kuminami (1.4-KUMIRELEASE1) unstable; urgency=low
+
+  * Alter the install scripts to install the backports version of facter and puppet.
+
+ -- Pieter Lexis <pieter@kumina.nl>  Tue, 14 Aug 2012 09:29:10 +0200
+
 kuminami (1.3KUMIRELEASE1) unstable; urgency=low
 
   * Add configtimeout to puppet.conf

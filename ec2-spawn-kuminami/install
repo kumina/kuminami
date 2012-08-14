@@ -86,6 +86,28 @@ echo $HOSTNAME_BASE > /target/etc/hostname
 sed -i "s/^127.0.0.1.*/127.0.0.1 $HOSTNAME $HOSTNAME_BASE localhost/" \
 	/target/etc/hosts
 
+cat > /target/etc/apt/sources.list.d/kumina.list << EOF
+deb	http://debian.kumina.nl/debian	squeeze-kumina	main
+EOF
+
+cat > /target/etc/apt/sources.list.d/squeeze-backports.list << EOF
+deb	http://backports.debian.org/debian-backports	squeeze-backports	main contrib non-free
+EOF
+
+cat > /target/etc/apt/preferences << EOF
+Package: puppet
+Pin: release a=squeeze-backports
+Pin-Priority: 999
+
+Package: facter
+Pin: version 1.5.9*
+Pin-Priority: 999
+
+Package: *
+Pin: release a=squeeze-kumina
+Pin-Priority: 999
+EOF
+
 # Install additional dependencies
 mount -t devpts none /target/dev/pts
 mount -t proc none /target/proc
@@ -99,26 +121,24 @@ chroot /target apt-get -y install \
 	resolvconf
 
 # Install Puppet configuration
-cat > /target/etc/default/puppet << EOF
-START=yes
-DAEMON_OPTS="-w 30"
-EOF
 cat > /target/etc/puppet/puppet.conf << EOF
 [main]
-logdir=/var/log/puppet
-vardir=/var/lib/puppet
-ssldir=/var/lib/puppet/ssl
-rundir=/var/run/puppet
-factpath=\$vardir/lib/facter
-templatedir=\$confdir/templates
-pluginsync=true
+environment = $PUPPETENVIRONMENT
+factpath = \$vardir/lib/facter
+logdir = /var/log/puppet
+pluginsync = true
+rundir = /var/run/puppet
+ssldir = /var/lib/puppet/ssl
+templatedir = \$confdir/templates
+vardir = /var/lib/puppet
 
 [agent]
-splay=true
-environment=$PUPPETENVIRONMENT
-runinterval=3600
-configtimeout=1800
+configtimeout = 1800
+report = false
+server = puppet1.kumina.nl
+splay = false
 EOF
+
 cat > /target/etc/rc.local << EOF
 #!/bin/sh
 
