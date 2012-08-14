@@ -90,12 +90,52 @@ cat > /target/etc/apt/sources.list.d/kumina.list << EOF
 deb	http://debian.kumina.nl/debian	squeeze-kumina	main
 EOF
 
+cat > /target/etc/apt/keys/056E8E56 << EOF
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.4.9 (GNU/Linux)
+
+mQGiBEeUi5wRBADbhyh7Je9ZpByQ208EI8gXXYwOEhq6U5E9AmdUMQfyq64hFiot
+K+G37s0dBJSIun/azR3chcstauUJWeLY2S1SzMbvggVh3K8J9aGMA8MvQSCNl8uJ
+PaGxtGcpHOEhze69ZJ2nEzJfAn0PZhUxmRZAX0e662f/JHPnAUAFfrmk8wCgntPB
+aJ1zXTCAcBNoGC/5WZLuOc0D/AjMsKcg+p6rhBb+R2zLTsZAySrt7O9NP5qld0RG
+Xg5GgpnsTfQA801ta4QLAhV9PFSXFT8cNNj+RfKJWNm5Gb5ofD61dk2ziZi7V+1+
+OZVYYgFk/45g5ClpDYiSYLeOYBAKw38Oiwf61vRsXDEfrjMl1Jxg/wy4CtmnCWMa
+fO9TBAC/cPVU0EuGW5cA+GtJCpShyZiGBnlhsSFdvyOXa5rL69x3gHgBIZC5p+wi
++9M/7WnjoQv/ci/ILxY3ZSpnuFUWWSQ/ypxBy0XVD/JU/xxJRnPMwu5Uqu17jrbY
+VwXJj4Ta3V/bi0+YfTLEd4v7dpi6U+4MnysMg7XUDqQ5rFiNw7RAS3VtaW5hIFBh
+Y2thZ2UgQXJjaGl2ZSBBdXRvbWF0aWMgU2lnbmluZyBLZXkgPHN1cHBvcnRAa3Vt
+aW5hLm5sPohmBBMRAgAmAhsDBgsJCAcDAgQVAggDBBYCAwECHgECF4AFAk0kbJEF
+CQsze3AACgkQ/uxb00mLkebj3wCfd6y4qXUO+x5j5ZwuYXuGsnpe44oAoIMhXnoq
+4XtBf4GKixTXsBHkS98fiGYEExECACYFAkeUi5wCGwMFCQHNbQAGCwkIBwMCBBUC
+CAMEFgIDAQIeAQIXgAAKCRD+7FvTSYuR5lNmAJ4tHHxzj66K1jlaVEk71kNWEv0m
+7QCgmkyrjcicnixmv5w9zTaQK+ShUa25Ag0ER5SLthAIAO/gLHqfAqirItmAFJs4
+vBX9EljQo8F5eaxDFbRzmlCFi+zJPZ1ZYbnZ/vdN8UxTa5XSNDiERxiv1cDmZ/u0
+LApXdp+OTOn3G3wHjTzi4zbAMyqHQz+FbCPlslPPaif1WRb6UWfmQ5kXG97+N+JQ
+Avx//jw0rhNIFnns2xg4G3Dn1PeiftKYOvLwtKSffFRXULueXwLW3gZdLN2hiZVZ
+AuSl13ax9rqiy2jB4909YyZl6wro2dRcgOEE3kq6uoyD9wVL492dXRNZu7wmk5IX
+yBlAHuAgRIih+rzFFof6r6+e3HjWM+VvFQ1WlzQexxrC616bvZbQtZOTpYgJi/cx
+tu8AAwUH/1iJ6njNIe8jRK0JMeMRLydwwvgSNyrOoTCeKgCwrGuUBdp71HP1vL3Q
+3umfrNzRN5DlObjJoLVq8bB/ePK0eBVh53qENiVJCqQRT7JHoN9tAqKAjpRfVOpq
+lCKelrFfS3rZzuf7yBm4eBMx6MMlf0UDvycVTb4Pri5XExgZXgSdkrWlhmJA8iPR
+Si+B7oVAJIJUmriVeH0Iod7StD/SHSmF3aqlJxaN5RF3zTA1LSihKTab/+qyXq1N
+9m/nbQXpO4jdPnVnv3rj5xrp8/1itd5JOro/8MfhpJ6EdAMqdCan/Ce52/0QnumV
+c9XPxKxlZ0G89b2L9vQutPgi6ZPOXFqITwQYEQIADwUCR5SLtgIbDAUJAc1tAAAK
+CRD+7FvTSYuR5g+cAJsFPFyrfEN3gQyIfRaIAF/IDOttWACeMryROLvfnPYWSy9q
+Fi5GYYVM9N4=
+=h2Cw
+-----END PGP PUBLIC KEY BLOCK-----
+EOF
+
 cat > /target/etc/apt/sources.list.d/squeeze-backports.list << EOF
 deb	http://backports.debian.org/debian-backports	squeeze-backports	main contrib non-free
 EOF
 
 cat > /target/etc/apt/preferences << EOF
 Package: puppet
+Pin: release a=squeeze-backports
+Pin-Priority: 999
+
+Package: puppet-common
 Pin: release a=squeeze-backports
 Pin-Priority: 999
 
