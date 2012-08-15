@@ -1,3 +1,9 @@
+kuminami (1.4-KUMIRELEASE2) unstable; urgency=low
+
+  * Pin facter to the version in the Kumina repo (as we ship the correct patches)
+
+ -- Pieter Lexis <pieter@kumina.nl>  Wed, 15 Aug 2012 10:24:51 +0200
+
 kuminami (1.4-KUMIRELEASE1) unstable; urgency=low
 
   * Alter the install scripts to install the backports version of facter and puppet.

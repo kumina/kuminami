@@ -104,7 +104,7 @@ Pin: release a=squeeze-backports
 Pin-Priority: 999
 
 Package: facter
-Pin: version 1.5.9*
+Pin: release a=squeeze-kumina
 Pin-Priority: 999
 
 Package: *
