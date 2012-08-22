@@ -1,3 +1,9 @@
+kuminami (1.5-KUMIRELEASE1) unstable; urgency=low
+
+  * Use the correct command to run puppet the first run.
+
+ -- Pieter Lexis <pieter@kumina.nl>  Wed, 22 Aug 2012 16:52:12 +0200
+
 kuminami (1.4-KUMIRELEASE2) unstable; urgency=low
 
   * Pin facter to the version in the Kumina repo (as we ship the correct patches)

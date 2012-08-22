@@ -153,7 +153,7 @@ cat > /target/etc/rc.local << EOF
 
 set -e
 
-puppetd --verbose --no-daemonize --no-splay --onetime
+puppet agent --show_diff --verbose --no-daemonize --no-splay --onetime --no-usecacheonfailure --ignorecache --server puppet1.kumina.nl --ca_server puppet1.kumina.nl --ca_port 8141
 
 if test -x /etc/rc.final
 then
