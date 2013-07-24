@@ -1,3 +1,11 @@
+kuminami (1.7-KUMIRELEASE1) unstable; urgency=low
+
+  * ec2-pdns-syncer:
+   - Revert changes made in 1.6
+   - Allow connections to remote hosts with new environment variables
+
+ -- Pieter Lexis <pieter@kumina.nl>  Wed, 24 Jul 2013 16:59:19 +0200
+
 kuminami (1.6-KUMIRELEASE1) unstable; urgency=low
 
   * make ec2-pdns-syncer only warn when a CNAME is incorrect

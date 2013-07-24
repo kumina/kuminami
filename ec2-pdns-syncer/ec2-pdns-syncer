@@ -9,6 +9,18 @@ fi
 
 . $1
 
+MYSQL_OPTIONS=''
+
+if [ -z "$EC2_PDNS_MYSQL_DEFAULTS_FILE" ]; then
+	if [ -z "$EC2_PDNS_MYSQL_HOST" -o -z "$EC2_PDNS_MYSQL_USER" -o -z "$EC2_PDNS_MYSQL_PASSWORD" -o -z "$EC2_PDNS_MYSQL_DB"]; then
+		echo 'Please set $EC2_PDNS_MYSQL_HOST, $EC2_PDNS_MYSQL_USER, $EC2_PDNS_MYSQL_PASSWORD and $EC2_PDNS_MYSQL_DB' >&2
+		exit 1
+	fi
+	MYSQL_OPTIONS=" -h $EC2_PDNS_MYSQL_HOST -u $EC2_PDNS_MYSQL_USER -password=$EC2_PDNS_MYSQL_PASSWORD $EC2_PDNS_MYSQL_OPTIONS"
+else
+	MYSQL_OPTIONS="--defaults-file=$EC2_PDNS_MYSQL_DEFAULTS_FILE"
+fi
+
 ec2-describe-instances | awk '
 BEGIN {
 	FS="\t"
@@ -42,4 +54,5 @@ BEGIN {
 END {
 	printf "COMMIT;\n";
 }
-' | mysql --defaults-file=$EC2_PDNS_MYSQL_DEFAULTS_FILE
+' | mysql $MYSQL_OPTIONS
+
