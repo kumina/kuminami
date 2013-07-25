@@ -1,3 +1,9 @@
+kuminami (1.7-KUMIRELEASE2) unstable; urgency=low
+
+  * ec2-pdns-syncer: fix a syntax error
+
+ -- Pieter Lexis <pieter@kumina.nl>  Thu, 25 Jul 2013 11:25:39 +0200
+
 kuminami (1.7-KUMIRELEASE1) unstable; urgency=low
 
   * ec2-pdns-syncer:
