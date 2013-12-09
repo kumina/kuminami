@@ -86,10 +86,6 @@ echo $HOSTNAME_BASE > /target/etc/hostname
 sed -i "s/^127.0.0.1.*/127.0.0.1 $HOSTNAME $HOSTNAME_BASE localhost/" \
 	/target/etc/hosts
 
-cat > /target/etc/apt/sources.list.d/kumina.list << EOF
-deb	http://debian.kumina.nl/debian	squeeze-kumina	main
-EOF
-
 cat > /target/etc/apt/sources.list.d/squeeze-backports.list << EOF
 deb	http://backports.debian.org/debian-backports	squeeze-backports	main contrib non-free
 EOF
@@ -103,19 +99,8 @@ Package: puppet-common
 Pin: release a=squeeze-backports
 Pin-Priority: 999
 
-Package: facter
-Pin: release a=squeeze-kumina
-Pin-Priority: 999
-
-Package: *
-Pin: release a=squeeze-kumina
-Pin-Priority: 999
 EOF
 
-
-wget -q -O /target/tmp/kumina.key http://debian.kumina.nl/debian/kumina-repository-key.pub
-
-chroot /target apt-key add /tmp/kumina.key
 
 # Install additional dependencies
 mount -t devpts none /target/dev/pts
@@ -153,7 +138,21 @@ cat > /target/etc/rc.local << EOF
 
 set -e
 
-puppet agent --show_diff --verbose --no-daemonize --no-splay --onetime --no-usecacheonfailure --ignorecache --server puppet1.kumina.nl --ca_server puppet1.kumina.nl --ca_port 8141
+echo "deb    http://debian.kumina.nl/debian  squeeze-kumina  main" > /etc/apt/sources.list.d/kumina.list
+
+wget -q -O /tmp/kumina.key http://debian.kumina.nl/debian/kumina-repository-key.pub
+
+apt-key add /tmp/kumina.key
+
+echo "" >> /etc/apt/preferences
+echo "Package: facter" >> /etc/apt/preferences
+echo "Pin: release a=squeeze-kumina" >> /etc/apt/preferences
+echo "Pin-Priority: 999" >> /etc/apt/preferences
+
+apt-get update
+DEBIAN_FRONTEND=noninteractive apt-get install -y facter
+
+puppet agent --no-daemonize --no-splay --onetime --no-usecacheonfailure --ignorecache --server puppet1.kumina.nl --ca_server puppet1.kumina.nl --ca_port 8141
 
 if test -x /etc/rc.final
 then
