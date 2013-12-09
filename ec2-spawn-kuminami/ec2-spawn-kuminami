@@ -90,4 +90,4 @@ export JAVA_HOME=/usr
 I=`ec2-run-instances -t $TYPE -f data.tar.gz ami-$AMI | awk '/^INSTANCE/ { print $2 }'`
 rm data.tar.gz
 
-ec2-create-tags $I -t hostname=$HOSTNAME
+ec2-create-tags $I -t Name=$HOSTNAME
