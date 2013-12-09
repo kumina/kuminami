@@ -46,7 +46,7 @@ BEGIN {
 		# Hostname tuple. Create new or update DNS entry.
 		sub(/\.'$EC2_PDNS_DOMAIN'$/, "", $5);
 		printf "DELETE FROM records WHERE name = '\''%s.'$EC2_PDNS_DOMAIN\'' AND type = '\''CNAME'\'' AND domain_id = @ec2domain;\n", $5;
-		printf "INSERT INTO records (name, type, content, domain_id, ttl, prio, change_date) VALUES ('\''%s.'$EC2_PDNS_DOMAIN\'', '\''CNAME'\'', '\''%s'\'', @ec2domain, 300, 0, @now);\n",
+		printf "INSERT INTO records (name, type, content, domain_id, ttl, prio, change_date, auth) VALUES ('\''%s.'$EC2_PDNS_DOMAIN\'', '\''CNAME'\'', '\''%s'\'', @ec2domain, 300, 0, @now, 1);\n",
 			$5, hostname[$3];
 	}
 }
