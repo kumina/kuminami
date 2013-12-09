@@ -91,3 +91,4 @@ I=`ec2-run-instances -t $TYPE -f data.tar.gz ami-$AMI | awk '/^INSTANCE/ { print
 rm data.tar.gz
 
 ec2-create-tags $I -t Name=$HOSTNAME
+ec2-create-tags $I -t hostname=$HOSTNAME
