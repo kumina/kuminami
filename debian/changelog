@@ -1,3 +1,10 @@
+kuminami (1.8-KUMIRELEASE0) unstable; urgency=low
+
+  * ec2-spawn-kuminami: Use Name tag so it show in the web console
+  * ec2-spawn-kuminami: Move install and setup to rc.local for stability
+
+ -- Tim Stoop <tim@kumina.nl>  Mon, 09 Dec 2013 11:28:30 +0100
+
 kuminami (1.7-KUMIRELEASE2) unstable; urgency=low
 
   * ec2-pdns-syncer: fix a syntax error
